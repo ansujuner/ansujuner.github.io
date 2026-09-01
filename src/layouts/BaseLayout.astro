@@ -27,7 +27,7 @@ const image = providedImage === undefined ? (type === 'website' ? '/og.jpg' : nu
 const pageTitle = title === siteConfig.title ? `${title} / ${siteConfig.romanizedName}` : `${title} · ${siteConfig.title}`;
 const canonical = new URL(canonicalPath ?? Astro.url.pathname, siteConfig.url);
 const imageUrl = image ? new URL(image, siteConfig.url) : null;
-const socialImageAlt = `${siteConfig.title} / ${siteConfig.romanizedName} — Student · Open Source · Hangzhou`;
+const socialImageAlt = `${siteConfig.title} / ${siteConfig.romanizedName} — 学生 · 开源 · 杭州 · 喵`;
 const serializedJsonLd = jsonLd
   ? JSON.stringify(jsonLd)
       .replace(/</g, '\\u003c')
@@ -41,7 +41,7 @@ const serializedJsonLd = jsonLd
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#f4f0e7" />
+    <meta name="theme-color" content="#fff9f2" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
@@ -75,7 +75,7 @@ const serializedJsonLd = jsonLd
           const theme = localStorage.getItem('theme');
           if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
           const dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
-          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#151513' : '#f4f0e7');
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#17141d' : '#fff9f2');
         } catch (_) {}
       })();
     </script>
