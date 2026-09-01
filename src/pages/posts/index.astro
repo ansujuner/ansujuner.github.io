@@ -5,16 +5,24 @@ import { getPublishedPosts } from '../../lib/posts';
 
 const posts = await getPublishedPosts();
 ---
-<BaseLayout title="文章" description="Ansujuner 的全部文章：代码、产品、工具与日常思考。">
+<BaseLayout title="文章 / Writing" description="徐丰俊的文章与公开笔记。" noindex={posts.length === 0}>
   <header class="page-hero container">
-    <span class="eyebrow">All writing · {String(posts.length).padStart(2, '0')}</span>
+    <span class="eyebrow"><span lang="en">Writing</span> · 文章</span>
     <h1>文章</h1>
-    <p>这里保存完整的思考过程。按时间倒序，也可以从标签或搜索开始。</p>
+    <p>这里会留给未来值得认真写下的内容。<br /><span lang="en">A space for thoughts worth writing down in the future.</span></p>
   </header>
   <section class="container" aria-label="文章列表">
-    <div class="post-list">
-      {posts.map((post) => <PostRow post={post} />)}
-    </div>
+    {posts.length ? (
+      <div class="post-list">{posts.map((post) => <PostRow post={post} />)}</div>
+    ) : (
+      <div class="empty-state">
+        <span lang="en">00 NOTES</span>
+        <h2>暂时还没有文章。</h2>
+        <p>先从介绍自己开始，内容会在真正值得记录的时候出现。</p>
+        <p lang="en">No posts yet. This site begins with an honest introduction.</p>
+        <a class="button" href="/">回到首页 / <span lang="en">Home</span></a>
+      </div>
+    )}
   </section>
   <div style="height: 6rem"></div>
 </BaseLayout>

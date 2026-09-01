@@ -10,25 +10,22 @@ for (const post of posts) {
 }
 const years = [...grouped.entries()].sort(([a], [b]) => Number(b) - Number(a));
 ---
-<BaseLayout title="归档" description="按年份浏览 Ansujuner 的全部文章。">
+<BaseLayout title="归档 / Archive" description="按时间浏览徐丰俊的公开文章。" noindex={posts.length === 0}>
   <header class="page-hero container">
-    <span class="eyebrow">Archive · {String(posts.length).padStart(2, '0')}</span>
+    <span class="eyebrow"><span lang="en">Archive</span> · 归档</span>
     <h1>归档</h1>
-    <p>时间不是分类标准，但它能让一路走来的变化变得清楚。</p>
+    <p>未来写下的内容，会在这里留下时间线。<br /><span lang="en">Future writing will form a timeline here.</span></p>
   </header>
   <section class="container archive" aria-label="文章归档">
-    {years.map(([year, yearPosts]) => (
+    {years.length ? years.map(([year, yearPosts]) => (
       <div class="archive-year">
         <h2>{year}</h2>
         <ol class="archive-items">
           {yearPosts.map((post) => (
-            <li>
-              <time datetime={post.data.publishDate.toISOString()}>{formatShortDate(post.data.publishDate).slice(5)}</time>
-              <a href={postHref(post)}>{post.data.title}</a>
-            </li>
+            <li><time datetime={post.data.publishDate.toISOString()}>{formatShortDate(post.data.publishDate).slice(5)}</time><a href={postHref(post)}>{post.data.title}</a></li>
           ))}
         </ol>
       </div>
-    ))}
+    )) : <div class="empty-state compact"><span lang="en">NO ARCHIVE YET</span><h2>时间线还没有开始。</h2></div>}
   </section>
 </BaseLayout>

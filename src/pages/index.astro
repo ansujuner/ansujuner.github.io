@@ -1,98 +1,142 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
 import { siteConfig } from '../site.config';
-import { collectTags, getPublishedPosts, tagHref } from '../lib/posts';
 
-const posts = await getPublishedPosts();
-const featured = posts.filter((post) => post.data.featured).slice(0, 3);
-const tags = collectTags(posts).slice(0, 5);
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebSite',
-      name: siteConfig.title,
-      url: siteConfig.url,
-      description: siteConfig.description,
-      inLanguage: siteConfig.locale,
-    },
-    {
-      '@type': 'Person',
-      name: siteConfig.author,
-      url: siteConfig.url,
-      sameAs: [siteConfig.social.github],
-    },
-  ],
+  '@type': 'Person',
+  name: siteConfig.author,
+  alternateName: siteConfig.romanizedName,
+  url: siteConfig.url,
+  email: `mailto:${siteConfig.social.email}`,
+  homeLocation: { '@type': 'Place', name: siteConfig.profile.locationEn },
+  description: siteConfig.description,
+  sameAs: [siteConfig.social.github, siteConfig.social.bilibili],
 };
 ---
 <BaseLayout jsonLd={jsonLd}>
-  <section class="hero">
-    <div class="container hero-grid">
-      <div>
-        <span class="eyebrow">Personal notes · Since {siteConfig.since}</span>
-        <h1>在代码与日常之间，认真写下一些东西。</h1>
-        <p class="hero-copy">{siteConfig.description} 不追赶每一个热点，只保存值得反复阅读的内容。</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="/posts/">
-            开始阅读
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          </a>
-          <a class="button" href="/about/">关于这个博客</a>
+  <div data-pagefind-body>
+    <section class="profile-hero">
+      <div class="container profile-hero-grid">
+        <div class="profile-hero-copy">
+          <span class="eyebrow" lang="en">Student · Hangzhou · Open Source</span>
+          <div class="profile-name-wrap">
+            <h1 data-pagefind-meta="title">{siteConfig.title}</h1>
+            <p class="profile-name-en" lang="en">{siteConfig.romanizedName} · Pinyin</p>
+          </div>
+          <blockquote class="profile-motto">
+            <p>“{siteConfig.tagline}”</p>
+            <span lang="en">Personal note, kept in the original wording.</span>
+          </blockquote>
+          <div class="profile-lead">
+            <p>喜欢天马星空的项目，也是一名坚定的开源主义者。这个网站从介绍我自己开始。</p>
+            <p lang="en">I enjoy imaginative projects and am a committed believer in open source. This website begins with an introduction to who I am.</p>
+          </div>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#about">认识我 <span aria-hidden="true">↓</span></a>
+            <a class="button" href="#contact">联系我 / <span lang="en">Get in touch</span></a>
+          </div>
+        </div>
+
+        <aside class="hero-note profile-card" aria-label="个人名片">
+          <div class="hero-note-top" lang="en"><span>XU / FENGJUN</span><span>HZ</span></div>
+          <div class="monogram monogram-han" aria-hidden="true">{siteConfig.profile.initial}</div>
+          <div class="hero-note-bottom">
+            <p>{siteConfig.profile.role}<br /><span lang="en">{siteConfig.profile.roleEn}</span></p>
+            <span class="profile-location">{siteConfig.profile.location}<small lang="en">{siteConfig.profile.locationEn}</small></span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="identity-section" aria-label="个人信息">
+      <div class="container identity-grid">
+        <div class="identity-item"><span lang="en">STATUS</span><strong>{siteConfig.profile.role}</strong><small lang="en">{siteConfig.profile.roleEn}</small></div>
+        <div class="identity-item"><span lang="en">BASE</span><strong>{siteConfig.profile.location}</strong><small lang="en">{siteConfig.profile.locationEn}</small></div>
+        <div class="identity-item"><span lang="en">INTEREST</span><strong>天马星空</strong><small lang="en">Imaginative projects</small></div>
+        <div class="identity-item"><span lang="en">BELIEF</span><strong>开源主义</strong><small lang="en">Open source</small></div>
+      </div>
+    </section>
+
+    <section class="section profile-about" id="about">
+      <div class="container profile-section-grid">
+        <div class="profile-section-title">
+          <span class="eyebrow" lang="en">About me · 01</span>
+          <h2>先从认识<br />我开始。</h2>
+          <p lang="en">Start with who I am.</p>
+        </div>
+        <div class="bilingual-copy">
+          <div class="language-block">
+            <span class="language-label">中文 / ZH</span>
+            <p>我是徐丰俊，一名在杭州的在校学生。我喜欢天马星空的项目，也是一名坚定的开源主义者。这个网站用来介绍我目前愿意公开的身份、兴趣与联系方式。</p>
+          </div>
+          <div class="language-block" lang="en">
+            <span class="language-label">ENGLISH / EN</span>
+            <p>I’m Xu Fengjun (pinyin), a student based in Hangzhou. I enjoy imaginative projects and am a committed believer in open source. This site introduces me through the details and public contact information I have chosen to share.</p>
+          </div>
+          <a class="text-link" href="/about/">继续了解我 / <span lang="en">More about me</span> <span aria-hidden="true">→</span></a>
         </div>
       </div>
-      <aside class="hero-note" aria-label="博客名片">
-        <div class="hero-note-top"><span>ANSUJUNER / NOTES</span><span>01</span></div>
-        <div class="monogram" aria-hidden="true">A</div>
-        <div class="hero-note-bottom">
-          <p>{siteConfig.tagline}<br />保持好奇，持续记录。</p>
-          <span class="hero-note-number">{String(posts.length).padStart(2, '0')}</span>
-        </div>
-      </aside>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="section-heading">
+    <section class="section" aria-labelledby="values-title">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow" lang="en">What matters · 02</span>
+            <h2 id="values-title">我在乎的事。</h2>
+          </div>
+          <p class="section-sidecopy" lang="en">Three things about me.</p>
+        </div>
+        <div class="value-grid">
+          <article class="value-card">
+            <span>01</span><h3>天马星空</h3><p>我喜欢富有想象力的项目。</p>
+            <hr /><h4 lang="en">Imagination</h4><p lang="en">I enjoy imaginative projects.</p>
+          </article>
+          <article class="value-card">
+            <span>02</span><h3>开源主义</h3><p>我坚定地支持开源。</p>
+            <hr /><h4 lang="en">Open source</h4><p lang="en">I firmly support open source.</p>
+          </article>
+          <article class="value-card">
+            <span>03</span><h3>在校学习</h3><p>我目前是一名在校学生。</p>
+            <hr /><h4 lang="en">Student</h4><p lang="en">I am currently a student.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container now-panel profile-now">
+        <span class="now-dot" aria-hidden="true"></span>
         <div>
-          <span class="eyebrow">Selected writing</span>
-          <h2>精选文章</h2>
+          <span class="language-label"><span lang="en">NOW</span> / 现在</span>
+          <h2>{siteConfig.now}</h2>
+          <p lang="en">{siteConfig.nowEn}</p>
         </div>
-        <a class="text-link" href="/posts/">查看全部 <span aria-hidden="true">→</span></a>
+        <span class="now-place">杭州<small lang="en">Hangzhou</small></span>
       </div>
-      <div class="post-grid">
-        {featured.map((post, index) => <PostCard post={post} index={index} />)}
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="container topic-panel">
-      <div class="topic-intro">
-        <span class="eyebrow">Topics</span>
-        <h2>好奇心没有固定边界。</h2>
-        <p>从具体的技术问题，到产品细节与生活观察。标签只是入口，思考可以自由穿行。</p>
-      </div>
-      <div class="topic-list">
-        {tags.map((tag) => (
-          <a class="topic-row" href={tagHref(tag.name)}>
-            <strong>{tag.name}</strong>
-            <span>{String(tag.count).padStart(2, '0')} NOTES ↗</span>
+    <section class="section contact-section" id="contact">
+      <div class="container contact-panel">
+        <div>
+          <span class="eyebrow" lang="en">Say hello · 03</span>
+          <h2>想说声你好？</h2>
+          <p>目前我不求职，也不接单。如需联系，可以通过以下公开渠道找到我。</p>
+          <p lang="en">I’m not currently looking for work or taking commissions. You can reach me through the public channels below.</p>
+        </div>
+        <div class="contact-links">
+          <a class="contact-link contact-link-primary" href={`mailto:${siteConfig.social.email}`}>
+            <span lang="en">EMAIL</span><strong>{siteConfig.social.email}</strong><i aria-hidden="true">↗</i>
           </a>
-        ))}
+          <a class="contact-link" href={siteConfig.social.github} target="_blank" rel="noreferrer">
+            <span lang="en">GITHUB</span><strong>@ansujuner</strong><i aria-hidden="true">↗</i><span class="sr-only">（新窗口打开）</span>
+          </a>
+          <a class="contact-link" href={siteConfig.social.bilibili} target="_blank" rel="noreferrer">
+            <span lang="en">BILIBILI</span><strong>{siteConfig.social.bilibiliName}</strong><i aria-hidden="true">↗</i><span class="sr-only">（新窗口打开）</span>
+          </a>
+        </div>
       </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container now-panel">
-      <span class="now-dot" aria-hidden="true"></span>
-      <div>
-        <h2>最近在做</h2>
-        <p>{siteConfig.now}</p>
-      </div>
-      <a class="button" href="/rss.xml">通过 RSS 订阅</a>
-    </div>
-  </section>
+    </section>
+  </div>
 </BaseLayout>

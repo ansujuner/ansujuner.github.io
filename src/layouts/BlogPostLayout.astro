@@ -39,7 +39,7 @@ const jsonLd = {
   <article>
     <header class="article-header">
       <div class="container">
-        <span class="eyebrow">Writing · {post.data.tags[0]}</span>
+        <span class="eyebrow"><span lang="en">Writing</span> · {post.data.tags[0]}</span>
         <h1 data-pagefind-meta="title">{post.data.title}</h1>
         <p class="article-dek" data-pagefind-meta="description">{post.data.description}</p>
         <div class="article-meta">
@@ -76,7 +76,7 @@ const jsonLd = {
       <p>如果这篇文章对你有帮助，可以分享给更多人。</p>
       <div class="share-actions">
         <button class="share-button" type="button" data-copy-link>复制链接</button>
-        <a class="share-button" href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(canonical)}`} target="_blank" rel="noreferrer">分享</a>
+        <a class="share-button" href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(canonical)}`} target="_blank" rel="noreferrer">分享<span class="sr-only">（新窗口打开）</span></a>
       </div>
     </div>
     {(previous || next) && (

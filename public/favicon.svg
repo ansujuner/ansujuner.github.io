@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Ansujuner">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Xu Fengjun">
   <rect width="64" height="64" rx="18" fill="#1d1c1a"/>
-  <path d="M17 47 28.2 17h7.9L47 47h-7.4l-2.2-6.8H26.5L24.3 47H17Zm11.5-13h7l-3.4-10.8L28.5 34Z" fill="#f4f0e7"/>
-  <circle cx="48" cy="17" r="4" fill="#d66025"/>
+  <path d="M17 17h8l7 10 7-10h8L36 32l11 15h-8l-7-10-7 10h-8l11-15L17 17Z" fill="#f4f0e7"/>
+  <circle cx="49" cy="15" r="4" fill="#d66025"/>
 </svg>

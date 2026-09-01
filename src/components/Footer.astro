@@ -6,14 +6,13 @@ const year = formatYear(new Date());
 <footer class="site-footer">
   <div class="container footer-inner">
     <div>
-      <div class="footer-brand">{siteConfig.title}</div>
-      <p class="footer-copy">© {siteConfig.since}–{year} · {siteConfig.tagline}</p>
+      <div class="footer-brand">{siteConfig.title} <span lang="en">/ {siteConfig.romanizedName}</span></div>
+      <p class="footer-copy" lang="en">© {siteConfig.since}–{year} · Personal site built with Astro.</p>
     </div>
     <nav class="footer-links" aria-label="页脚导航">
-      <a href="/rss.xml">RSS</a>
-      <a href="/search/">搜索</a>
-      <a href={siteConfig.social.github} target="_blank" rel="noreferrer">GitHub</a>
-      {siteConfig.social.email && <a href={`mailto:${siteConfig.social.email}`}>Email</a>}
+      <a href={siteConfig.social.github} target="_blank" rel="noreferrer"><span lang="en">GitHub</span><span class="sr-only">（新窗口打开）</span></a>
+      <a href={siteConfig.social.bilibili} target="_blank" rel="noreferrer"><span lang="en">Bilibili</span><span class="sr-only">（新窗口打开）</span></a>
+      <a href={`mailto:${siteConfig.social.email}`}><span lang="en">Email</span></a>
       <a href="#top">回到顶部 ↑</a>
     </nav>
   </div>

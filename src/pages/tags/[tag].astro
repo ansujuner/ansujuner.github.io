@@ -16,7 +16,7 @@ const { tag, posts } = Astro.props;
 ---
 <BaseLayout title={`标签：${tag}`} description={`所有与“${tag}”相关的文章。`}>
   <header class="page-hero container">
-    <span class="eyebrow">Topic · {String(posts.length).padStart(2, '0')}</span>
+    <span class="eyebrow"><span lang="en">Topic</span> · {String(posts.length).padStart(2, '0')}</span>
     <h1>#{tag}</h1>
     <p>共 {posts.length} 篇文章。<a href="/tags/">返回全部标签</a></p>
   </header>

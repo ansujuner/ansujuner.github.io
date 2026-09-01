@@ -1,15 +1,26 @@
-# Ansujuner's Blog
+# 徐丰俊 / Xu Fengjun
 
-个人博客源码，使用 Astro 构建并自动发布到 GitHub Pages。
+个人介绍与博客网站，使用 Astro 构建并自动发布到 GitHub Pages。
 
 - 线上地址：<https://ansujuner.github.io/>
-- 框架：Astro + Markdown
+- 公开身份：在校学生，杭州
+- 页面语言：中文 / English
 - 部署：GitHub Actions → GitHub Pages
-- 搜索：Pagefind（构建时生成本地索引）
+
+## 修改个人资料
+
+主要资料集中在 `src/site.config.ts`：
+
+- 中文名、拼音/罗马字与个性签名
+- 身份、所在地、兴趣和开源立场
+- 邮箱、GitHub、哔哩哔哩链接
+- “最近在做”与导航项目
+
+主页内容在 `src/pages/index.astro`，完整自我介绍在 `src/pages/about.astro`。
 
 ## 写一篇新文章
 
-在 `src/content/posts/` 新建一个 `.md` 文件：
+在 `src/content/posts/` 新建 `.md` 文件：
 
 ```md
 ---
@@ -27,20 +38,9 @@ draft: false
 从这里开始写正文。
 ```
 
-- `draft: true`：不会出现在正式网站、RSS、Sitemap 或搜索中。
-- `featured: true`：可进入首页精选区（首页最多展示 3 篇）。
-- 文件名会成为文章地址，建议使用简短英文和连字符，例如 `my-first-post.md`。
-
-## 修改个人资料
-
-统一编辑 `src/site.config.ts`，可修改：
-
-- 站点名、简介与标语
-- “最近在做”
-- GitHub 和公开邮箱
-- 导航项目
-
-公开邮箱为空时不会显示。评论和统计默认关闭。
+- `draft: true`：不会进入正式网站、RSS、Sitemap 或搜索。
+- 文件名会成为文章地址，建议使用简短英文和连字符。
+- 当前没有公开文章；文章、标签和归档路由会在有内容后自动进入 Sitemap。
 
 ## 本地预览
 
@@ -49,26 +49,15 @@ npm install
 npm run dev
 ```
 
-访问终端显示的本地地址。全文搜索只会在完整构建后生成：
+完整构建和自动校验：
 
 ```bash
 npm run build
 npm run preview
 ```
 
+构建会检查类型、生成静态页面和全文搜索，并验证标题、SEO、RSS 及内部链接。
+
 ## 发布
 
-把修改推送到 `main` 分支即可。`.github/workflows/deploy.yml` 会自动检查、构建、生成搜索索引并部署。
-
-## 目录
-
-```text
-src/
-  components/       页面组件
-  content/posts/    Markdown 文章
-  layouts/          页面布局
-  pages/            路由页面
-  styles/           全局样式
-  site.config.ts    站点配置
-public/             图标、分享图等静态资源
-```
+推送到 `main` 分支后，`.github/workflows/deploy.yml` 会自动部署到 GitHub Pages。

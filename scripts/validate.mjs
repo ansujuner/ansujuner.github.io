@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { extname, join, relative, resolve } from 'node:path';
+import { basename, extname, join, relative, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
 const dist = join(root, 'dist');
@@ -17,6 +17,39 @@ function pagePathFor(file) {
   if (path === 'index.html') return '/';
   if (path.endsWith('/index.html')) return `/${path.slice(0, -'index.html'.length)}`;
   return `/${path}`;
+}
+
+function attributeValue(tag, name) {
+  const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const quoted = tag.match(new RegExp(`\\b${escapedName}\\s*=\\s*(["'])(.*?)\\1`, 'i'));
+  if (quoted) return quoted[2];
+  return tag.match(new RegExp(`\\b${escapedName}\\s*=\\s*([^\\s>]+)`, 'i'))?.[1] ?? null;
+}
+
+function canonicalUrl(html, file) {
+  for (const match of html.matchAll(/<link\b[^>]*>/gi)) {
+    const rel = attributeValue(match[0], 'rel')?.toLowerCase().split(/\s+/) ?? [];
+    if (rel.includes('canonical')) return attributeValue(match[0], 'href');
+  }
+  return new URL(pagePathFor(file), 'https://ansujuner.github.io').href;
+}
+
+function hasNoindex(html) {
+  for (const match of html.matchAll(/<meta\b[^>]*>/gi)) {
+    if (attributeValue(match[0], 'name')?.toLowerCase() !== 'robots') continue;
+    const directives = attributeValue(match[0], 'content')?.toLowerCase().split(/[\s,]+/) ?? [];
+    if (directives.includes('noindex')) return true;
+  }
+  return false;
+}
+
+function decodeXmlText(value) {
+  return value
+    .replaceAll('&amp;', '&')
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>')
+    .replaceAll('&quot;', '"')
+    .replaceAll('&apos;', "'");
 }
 
 function localTarget(raw, sourceFile) {
@@ -43,6 +76,7 @@ else {
 
   const htmlFiles = walk(dist).filter((file) => file.endsWith('.html'));
   const titles = new Map();
+  const noindexPages = [];
   let linksChecked = 0;
 
   for (const file of htmlFiles) {
@@ -57,6 +91,8 @@ else {
     if (!/<meta\s+name="description"\s+content="[^"]+"/i.test(html)) failures.push(`${label} 缺少 meta description`);
     if (!/<link\s+rel="canonical"\s+href="https:\/\/ansujuner\.github\.io\//i.test(html)) failures.push(`${label} canonical 地址不正确`);
     if (!/<html\s+lang="zh-CN"/i.test(html)) failures.push(`${label} 页面语言不是 zh-CN`);
+
+    if (hasNoindex(html)) noindexPages.push({ label, url: canonicalUrl(html, file) });
 
     for (const match of html.matchAll(/(?:href|src)="([^"]+)"/gi)) {
       const target = localTarget(match[1], file);
@@ -73,8 +109,18 @@ else {
     : 0;
   const rssCount = (rss.match(/<item>/g) ?? []).length;
   if (rssCount !== articleCount) failures.push('RSS 条目数 ' + rssCount + ' 与公开文章页数量 ' + articleCount + ' 不一致');
-  const sitemap = existsSync(join(dist, 'sitemap-0.xml')) ? readFileSync(join(dist, 'sitemap-0.xml'), 'utf8') : '';
+  const sitemapFiles = walk(dist).filter((file) => /^sitemap(?:-index|-\d+)?\.xml$/i.test(basename(file)));
+  const sitemap = sitemapFiles.map((file) => readFileSync(file, 'utf8')).join('\n');
+  const sitemapUrls = new Set(
+    [...sitemap.matchAll(/<loc>\s*([^<]+?)\s*<\/loc>/gi)].map((match) => decodeXmlText(match[1].trim())),
+  );
   if (sitemap.includes('draft')) failures.push('Sitemap 中意外包含草稿');
+
+  for (const page of noindexPages) {
+    if (page.url && sitemapUrls.has(page.url)) {
+      failures.push(`${page.label} has noindex but is listed in Sitemap: ${page.url}`);
+    }
+  }
 
   console.log(`Validated ${htmlFiles.length} HTML files and ${linksChecked} local links.`);
 }
