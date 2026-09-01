@@ -42,7 +42,7 @@ const serializedJsonLd = jsonLd
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#fbf8f3" />
+    <meta name="theme-color" content="#fff8f3" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
@@ -76,7 +76,7 @@ const serializedJsonLd = jsonLd
           const theme = localStorage.getItem('theme');
           if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
           const dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
-          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#1c1920' : '#fbf8f3');
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#211a22' : '#fff8f3');
         } catch (_) {}
       })();
     </script>

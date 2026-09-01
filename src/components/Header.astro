@@ -81,7 +81,7 @@ const isActive = (href: string) => {
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
     const syncThemeColor = (theme: typeof themes[number]) => {
       const dark = theme === 'dark' || (theme === 'system' && systemTheme.matches);
-      document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', dark ? '#1c1920' : '#fbf8f3');
+      document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', dark ? '#211a22' : '#fff8f3');
     };
     const applyTheme = (theme: typeof themes[number]) => {
       if (theme === 'system') document.documentElement.removeAttribute('data-theme');
