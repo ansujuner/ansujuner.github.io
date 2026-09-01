@@ -24,10 +24,11 @@ const {
   jsonLd,
 } = Astro.props;
 const image = providedImage === undefined ? (type === 'website' ? '/og.jpg' : null) : providedImage;
-const pageTitle = title === siteConfig.title ? `${title} / ${siteConfig.romanizedName}` : `${title} · ${siteConfig.title}`;
+const siteName = `${siteConfig.title} / ${siteConfig.titleEn}`;
+const pageTitle = title === siteConfig.title ? siteName : `${title} · ${siteName}`;
 const canonical = new URL(canonicalPath ?? Astro.url.pathname, siteConfig.url);
 const imageUrl = image ? new URL(image, siteConfig.url) : null;
-const socialImageAlt = `${siteConfig.title} / ${siteConfig.romanizedName} — 学生 · 开源 · 杭州 · 喵`;
+const socialImageAlt = `${siteConfig.title} — ${siteConfig.titleEn} · 学生 · 开源 · 杭州`;
 const serializedJsonLd = jsonLd
   ? JSON.stringify(jsonLd)
       .replace(/</g, '\\u003c')
@@ -41,16 +42,16 @@ const serializedJsonLd = jsonLd
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#fff9f2" />
+    <meta name="theme-color" content="#fbf8f3" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate" type="application/rss+xml" title={`${siteConfig.title} RSS`} href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${siteName} RSS`} href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:type" content={type} />
-    <meta property="og:site_name" content={siteConfig.title} />
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:locale:alternate" content="en_US" />
     <meta property="og:title" content={pageTitle} />
@@ -75,7 +76,7 @@ const serializedJsonLd = jsonLd
           const theme = localStorage.getItem('theme');
           if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
           const dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
-          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#17141d' : '#fff9f2');
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#1c1920' : '#fbf8f3');
         } catch (_) {}
       })();
     </script>

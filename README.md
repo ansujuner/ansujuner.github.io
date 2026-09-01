@@ -1,8 +1,9 @@
-# 徐丰俊 / Xu Fengjun
+# 爪印小站 / Pawprint Notes
 
-个人介绍与博客网站，使用 Astro 构建并自动发布到 GitHub Pages。
+徐丰俊的个人介绍与博客网站，使用 Astro 构建并自动发布到 GitHub Pages。
 
 - 线上地址：<https://ansujuner.github.io/>
+- 站点名称：爪印小站 / Pawprint Notes
 - 公开身份：在校学生，杭州
 - 页面语言：中文 / English
 - 部署：GitHub Actions → GitHub Pages
@@ -11,7 +12,7 @@
 
 主要资料集中在 `src/site.config.ts`：
 
-- 中文名、拼音/罗马字与个性签名
+- 站点名称、中文名、拼音/罗马字与个性签名
 - 身份、所在地、兴趣和开源立场
 - 邮箱、GitHub、哔哩哔哩链接
 - “最近在做”与导航项目

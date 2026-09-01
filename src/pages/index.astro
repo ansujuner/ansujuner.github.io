@@ -2,16 +2,33 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { siteConfig } from '../site.config';
 
+const personId = `${siteConfig.url}/#person`;
+const websiteId = `${siteConfig.url}/#website`;
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: siteConfig.author,
-  alternateName: siteConfig.romanizedName,
-  url: siteConfig.url,
-  email: `mailto:${siteConfig.social.email}`,
-  homeLocation: { '@type': 'Place', name: siteConfig.profile.locationEn },
-  description: siteConfig.description,
-  sameAs: [siteConfig.social.github, siteConfig.social.bilibili],
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': websiteId,
+      name: siteConfig.title,
+      alternateName: siteConfig.titleEn,
+      url: siteConfig.url,
+      description: siteConfig.description,
+      inLanguage: ['zh-CN', 'en'],
+      author: { '@id': personId },
+    },
+    {
+      '@type': 'Person',
+      '@id': personId,
+      name: siteConfig.author,
+      alternateName: siteConfig.romanizedName,
+      url: `${siteConfig.url}/about/`,
+      email: `mailto:${siteConfig.social.email}`,
+      homeLocation: { '@type': 'Place', name: siteConfig.profile.locationEn },
+      description: '在杭州上学的在校学生，喜欢天马星空的项目，也是一名坚定的开源主义者。',
+      sameAs: [siteConfig.social.github, siteConfig.social.bilibili],
+    },
+  ],
 };
 ---
 <BaseLayout jsonLd={jsonLd}>
@@ -22,7 +39,7 @@ const jsonLd = {
           <span class="eyebrow" lang="en">Student · Hangzhou · Open Source</span>
           <div class="profile-name-wrap">
             <h1 data-pagefind-meta="title">{siteConfig.title}</h1>
-            <p class="profile-name-en" lang="en">{siteConfig.romanizedName} · Pinyin</p>
+            <p class="profile-name-en" lang="en">{siteConfig.titleEn}</p>
           </div>
           <div class="profile-motto">
             <p>{siteConfig.tagline}</p>
@@ -38,9 +55,9 @@ const jsonLd = {
           </div>
         </div>
 
-        <aside class="hero-note profile-card" aria-label="个人名片">
-          <div class="hero-note-top" lang="en"><span>XU / FENGJUN</span><span>HANGZHOU</span></div>
-          <div class="monogram monogram-han" aria-hidden="true">{siteConfig.profile.initial}</div>
+        <aside class="hero-note profile-card" aria-label="站点名片">
+          <div class="hero-note-top" lang="en"><span>PAWPRINT / NOTES</span><span>HANGZHOU</span></div>
+          <div class="monogram monogram-han" aria-hidden="true">{siteConfig.mark}</div>
           <div class="hero-note-bottom">
             <p>{siteConfig.profile.role}<br /><span lang="en">{siteConfig.profile.roleEn}</span></p>
             <span class="profile-location">{siteConfig.profile.location}<small lang="en">{siteConfig.profile.locationEn}</small></span>

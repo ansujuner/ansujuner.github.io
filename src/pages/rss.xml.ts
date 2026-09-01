@@ -6,7 +6,7 @@ import { siteConfig } from '../site.config';
 export async function GET(context: APIContext) {
   const posts = await getPublishedPosts();
   return rss({
-    title: siteConfig.title,
+    title: `${siteConfig.title} / ${siteConfig.titleEn}`,
     description: siteConfig.description,
     site: context.site ?? siteConfig.url,
     customData: `<language>${siteConfig.locale}</language>`,

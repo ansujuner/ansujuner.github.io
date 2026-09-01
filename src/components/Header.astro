@@ -10,10 +10,10 @@ const isActive = (href: string) => {
 <header class="site-header" data-header>
   <div class="container header-inner">
     <a class="brand" href="/" aria-label={`${siteConfig.title} 首页`}>
-      <span class="brand-mark brand-mark-han" aria-hidden="true">{siteConfig.profile.initial}</span>
+      <span class="brand-mark brand-mark-han" aria-hidden="true">{siteConfig.mark}</span>
       <span class="brand-copy">
         <strong>{siteConfig.title}</strong>
-        <small lang="en">{siteConfig.romanizedName}</small>
+        <small lang="en">{siteConfig.titleEn}</small>
       </span>
     </a>
 
@@ -81,7 +81,7 @@ const isActive = (href: string) => {
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
     const syncThemeColor = (theme: typeof themes[number]) => {
       const dark = theme === 'dark' || (theme === 'system' && systemTheme.matches);
-      document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', dark ? '#17141d' : '#fff9f2');
+      document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', dark ? '#1c1920' : '#fbf8f3');
     };
     const applyTheme = (theme: typeof themes[number]) => {
       if (theme === 'system') document.documentElement.removeAttribute('data-theme');
