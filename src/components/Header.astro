@@ -69,7 +69,10 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
       if (window.innerWidth > 900) closeMenu();
     }, { passive: true });
 
-    const getTheme = () => localStorage.getItem('theme') as typeof themes[number] | null;
+    const getTheme = () => {
+      try { return localStorage.getItem('theme') as typeof themes[number] | null; }
+      catch { return null; }
+    };
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
     const syncThemeColor = (theme: typeof themes[number]) => {
       const dark = theme === 'dark' || (theme === 'system' && systemTheme.matches);
@@ -78,7 +81,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
     const applyTheme = (theme: typeof themes[number]) => {
       if (theme === 'system') document.documentElement.removeAttribute('data-theme');
       else document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
+      try { localStorage.setItem('theme', theme); } catch {}
       syncThemeColor(theme);
       if (themeButton) {
         themeButton.setAttribute('aria-label', `主题：${labels[theme]}，点击切换`);

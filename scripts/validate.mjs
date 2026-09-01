@@ -12,11 +12,25 @@ function walk(dir) {
   });
 }
 
-function localTarget(raw) {
-  if (!raw || /^(?:https?:|mailto:|tel:|data:|javascript:|#)/i.test(raw)) return null;
-  const clean = decodeURIComponent(raw.split('#')[0].split('?')[0]);
-  const pathname = clean.startsWith('/') ? clean.slice(1) : clean;
-  if (!pathname || clean.endsWith('/')) return join(dist, pathname, 'index.html');
+function pagePathFor(file) {
+  const path = relative(dist, file).replaceAll('\\', '/');
+  if (path === 'index.html') return '/';
+  if (path.endsWith('/index.html')) return `/${path.slice(0, -'index.html'.length)}`;
+  return `/${path}`;
+}
+
+function localTarget(raw, sourceFile) {
+  if (!raw || /^(?:mailto:|tel:|data:|javascript:|#|\?)/i.test(raw)) return null;
+  let url;
+  try {
+    url = new URL(raw, `https://local.invalid${pagePathFor(sourceFile)}`);
+  } catch {
+    failures.push(`${relative(dist, sourceFile)} 的链接格式无效：${raw}`);
+    return null;
+  }
+  if (url.origin !== 'https://local.invalid') return null;
+  const pathname = decodeURIComponent(url.pathname).replace(/^\//, '');
+  if (!pathname || url.pathname.endsWith('/')) return join(dist, pathname, 'index.html');
   const direct = join(dist, pathname);
   if (extname(pathname)) return direct;
   return existsSync(direct) ? direct : join(direct, 'index.html');
@@ -45,7 +59,7 @@ else {
     if (!/<html\s+lang="zh-CN"/i.test(html)) failures.push(`${label} 页面语言不是 zh-CN`);
 
     for (const match of html.matchAll(/(?:href|src)="([^"]+)"/gi)) {
-      const target = localTarget(match[1]);
+      const target = localTarget(match[1], file);
       if (!target) continue;
       linksChecked++;
       if (!existsSync(target)) failures.push(`${label} 的链接不存在：${match[1]}`);
@@ -55,7 +69,7 @@ else {
   const rss = existsSync(join(dist, 'rss.xml')) ? readFileSync(join(dist, 'rss.xml'), 'utf8') : '';
   const postsDir = join(dist, 'posts');
   const articleCount = existsSync(postsDir)
-    ? readdirSync(postsDir, { withFileTypes: true }).filter((entry) => entry.isDirectory() && existsSync(join(postsDir, entry.name, 'index.html'))).length
+    ? walk(postsDir).filter((file) => file.endsWith(`${join('', 'index.html')}`) && resolve(file) !== resolve(postsDir, 'index.html')).length
     : 0;
   const rssCount = (rss.match(/<item>/g) ?? []).length;
   if (rssCount !== articleCount) failures.push('RSS 条目数 ' + rssCount + ' 与公开文章页数量 ' + articleCount + ' 不一致');
