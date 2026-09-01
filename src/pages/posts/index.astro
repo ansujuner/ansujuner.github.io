@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostRow from '../../components/PostRow.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="文章" description="Ansujuner 的全部文章：代码、产品、工具与日常思考。">
+  <header class="page-hero container">
+    <span class="eyebrow">All writing · {String(posts.length).padStart(2, '0')}</span>
+    <h1>文章</h1>
+    <p>这里保存完整的思考过程。按时间倒序，也可以从标签或搜索开始。</p>
+  </header>
+  <section class="container" aria-label="文章列表">
+    <div class="post-list">
+      {posts.map((post) => <PostRow post={post} />)}
+    </div>
+  </section>
+  <div style="height: 6rem"></div>
+</BaseLayout>

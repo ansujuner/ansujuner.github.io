@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../site.config';
+---
+<BaseLayout title="关于" description={`关于 ${siteConfig.author} 与这个博客。`}>
+  <header class="page-hero container">
+    <span class="eyebrow">About</span>
+    <h1>你好，我是 {siteConfig.author}。</h1>
+    <p>{siteConfig.tagline} 这里是一个长期维护的个人空间，关于代码、产品，也关于屏幕之外的生活。</p>
+  </header>
+
+  <section class="container about-grid">
+    <aside class="about-card">
+      <div class="about-avatar" aria-hidden="true">A</div>
+      <h2>{siteConfig.author}</h2>
+      <p>Builder · Writer · Learner</p>
+      <div class="hero-actions">
+        <a class="button" href={siteConfig.social.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+        <a class="button" href="/rss.xml">RSS</a>
+      </div>
+    </aside>
+
+    <div class="about-content">
+      <p>我喜欢把模糊的问题拆清楚，把重复的步骤做成工具，也把那些容易被忘记的想法写下来。这个博客不追求固定更新频率，只希望每一篇内容都值得在未来某天重新打开。</p>
+
+      <h2>这里会有什么</h2>
+      <p>技术文章会尽量保留完整的背景、过程和验证；产品笔记关注体验背后的取舍；随笔则允许答案暂时不那么确定。</p>
+      <ul>
+        <li>开发、自动化与解决问题的方法；</li>
+        <li>产品、设计和工具使用体验；</li>
+        <li>学习过程中可复用的路径与笔记；</li>
+        <li>偶尔出现的生活观察。</li>
+      </ul>
+
+      <h2>写作原则</h2>
+      <div class="principles">
+        <div class="principle"><strong>先有证据，再下结论</strong><p>区分事实、推测与个人偏好，尽量提供能独立验证的路径。</p></div>
+        <div class="principle"><strong>让复杂的内容容易进入</strong><p>保留必要细节，但不让术语成为理解的门槛。</p></div>
+        <div class="principle"><strong>尊重注意力</strong><p>不使用侵入式弹窗、广告或默认开启的第三方追踪。</p></div>
+      </div>
+
+      <h2>保持联系</h2>
+      {siteConfig.social.email ? (
+        <p>可以在 <a href={siteConfig.social.github} target="_blank" rel="noreferrer">GitHub</a> 查看公开项目，通过 <a href="/rss.xml">RSS</a> 订阅更新，或发送邮件到 <a href={`mailto:${siteConfig.social.email}`}>{siteConfig.social.email}</a>。</p>
+      ) : (
+        <p>可以在 <a href={siteConfig.social.github} target="_blank" rel="noreferrer">GitHub</a> 查看公开项目，或者通过 <a href="/rss.xml">RSS</a> 订阅更新。这里暂不公开私人联系方式，也没有启用评论与访问跟踪。</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
